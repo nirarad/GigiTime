@@ -137,3 +137,122 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# ========================================
+# React / Capacitor Build Files
+# ========================================
+
+# React build output
+build/
+dist/
+
+# Capacitor build files
+android/app/build/
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+
+# ========================================
+# Android Development Files
+# ========================================
+
+# Android build outputs
+android/app/build/
+android/app/release/
+android/app/debug/
+android/.gradle/
+android/gradle/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+android/app/src/main/assets/
+
+# Android Studio
+.idea/
+*.iml
+*.ipr
+*.iws
+android/.idea/
+android/app/.idea/
+
+# ========================================
+# Capacitor Generated Files
+# ========================================
+
+# Capacitor config (auto-generated)
+capacitor.config.json
+android/app/src/main/assets/capacitor.config.json
+
+# ========================================
+# OS Generated Files
+# ========================================
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+
+# ========================================
+# Development Tools
+# ========================================
+
+# VSCode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# WebStorm
+.idea/
+
+# ========================================
+# Temporary Files
+# ========================================
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# ========================================
+# Package Manager Files
+# ========================================
+
+# npm
+package-lock.json
+npm-debug.log*
+
+# yarn
+yarn.lock
+yarn-error.log*
+.pnp.*
+
+# ========================================
+# Environment and Config Files
+# ========================================
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Local configuration
+config.local.js
+config.local.json
