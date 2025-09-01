@@ -67,9 +67,21 @@ Set-Location ".."
 
 # Check if APK was created
 $apkPath = "android\app\build\outputs\apk\debug\app-debug.apk"
+$finalApkPath = "gigi-time.apk"
+
 if (Test-Path $apkPath) {
     $apkSize = (Get-Item $apkPath).Length / 1MB
-    Write-Host "   APK created: $apkPath" -ForegroundColor Green
+    
+    # Rename the APK to gigi-time.apk
+    Write-Host "Renaming APK to gigi-time.apk..." -ForegroundColor Yellow
+    if (Test-Path $finalApkPath) {
+        Remove-Item $finalApkPath -Force
+    }
+    Copy-Item $apkPath $finalApkPath
+    Write-Host "   APK renamed successfully" -ForegroundColor Green
+    
+    Write-Host "   Original APK: $apkPath" -ForegroundColor Green
+    Write-Host "   Final APK: $finalApkPath" -ForegroundColor Green
     Write-Host "   APK size: $([math]::Round($apkSize, 1)) MB" -ForegroundColor Green
 } else {
     Write-Host "APK not found at expected location" -ForegroundColor Red
@@ -81,7 +93,7 @@ Write-Host "APK Build completed successfully!" -ForegroundColor Green
 Write-Host "Your APK is ready for installation" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor White
-Write-Host "1. Copy the APK to your device: $apkPath" -ForegroundColor White
+Write-Host "1. Copy the APK to your device: $finalApkPath" -ForegroundColor White
 Write-Host "2. Enable 'Install from Unknown Sources' on your device" -ForegroundColor White
 Write-Host "3. Install the APK manually" -ForegroundColor White
 Write-Host ""
@@ -91,5 +103,5 @@ Write-Host "   - Use 'update-android.ps1' to try automatic installation" -Foregr
 Write-Host "   - Use 'npx cap run android' to run on a specific emulator" -ForegroundColor White
 Write-Host ""
 Write-Host "APK Location:" -ForegroundColor Cyan
-Write-Host "   - Debug APK: $apkPath" -ForegroundColor White
+Write-Host "   - Debug APK: $finalApkPath" -ForegroundColor White
 Write-Host "   - File size: $([math]::Round($apkSize, 1)) MB" -ForegroundColor White
