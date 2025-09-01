@@ -67,18 +67,18 @@ Set-Location ".."
 
 # Check if APK was created
 $apkPath = "android\app\build\outputs\apk\debug\app-debug.apk"
-$finalApkPath = "gigi-time.apk"
+$finalApkPath = "build\gigi-time.apk"
 
 if (Test-Path $apkPath) {
     $apkSize = (Get-Item $apkPath).Length / 1MB
     
-    # Rename the APK to gigi-time.apk
-    Write-Host "Renaming APK to gigi-time.apk..." -ForegroundColor Yellow
+    # Rename the APK to gigi-time.apk in the build folder
+    Write-Host "Moving APK to build folder as gigi-time.apk..." -ForegroundColor Yellow
     if (Test-Path $finalApkPath) {
         Remove-Item $finalApkPath -Force
     }
     Copy-Item $apkPath $finalApkPath
-    Write-Host "   APK renamed successfully" -ForegroundColor Green
+    Write-Host "   APK moved successfully" -ForegroundColor Green
     
     Write-Host "   Original APK: $apkPath" -ForegroundColor Green
     Write-Host "   Final APK: $finalApkPath" -ForegroundColor Green

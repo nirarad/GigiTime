@@ -64,12 +64,12 @@ Make sure you have:
 
 After running either script, your debug APK will be located at:
 ```
-gigi-time.apk
+build\gigi-time.apk
 ```
 
 **File Size**: Typically 25-30 MB  
 **Type**: Debug APK (properly signed for development)  
-**Note**: The APK is automatically renamed from `app-debug.apk` to `gigi-time.apk` for easier identification
+**Note**: The APK is automatically moved from `android\app\build\outputs\apk\debug\app-debug.apk` to `build\gigi-time.apk` for easier access and to avoid accidental git commits
 
 ## 🎯 After Running the Script
 
@@ -131,7 +131,7 @@ cd android
 cd ..
 
 # The APK will be at: android\app\build\outputs\apk\debug\app-debug.apk
-# You can rename it to: gigi-time.apk
+# You can move it to: build\gigi-time.apk
 
 # Open Android Studio
 npx cap open android
