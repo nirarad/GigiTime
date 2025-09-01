@@ -6,6 +6,15 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* App Container */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 /* Header Styles */
@@ -26,6 +35,7 @@ header {
   display: flex;
   align-items: center;
   gap: 1.25rem;
+  position: relative;
 }
 
 .drummer-thumbnail {
@@ -78,19 +88,67 @@ header {
   margin: 0;
 }
 
+/* Help Button */
+.help-button {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.2), rgba(79, 70, 229, 0.2));
+  border: 2px solid rgba(59, 130, 246, 0.4);
+  color: #bfdbfe;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.help-button:hover {
+  background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.3), rgba(79, 70, 229, 0.3));
+  border-color: rgba(59, 130, 246, 0.6);
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.15);
+}
+
+.help-button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 /* Main Content */
 main {
   max-width: 72rem;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 1rem;
   display: grid;
-  gap: 2rem;
+  gap: 1rem;
   grid-template-columns: 1fr;
+  height: calc(100vh - 160px); /* Fixed height to prevent scrolling */
+  overflow: hidden; /* Prevent main container scrolling */
+  align-items: start; /* Align containers to the top */
 }
 
 @media (min-width: 768px) {
   main {
     grid-template-columns: 1fr 1fr;
+    height: calc(100vh - 160px); /* Fixed height to prevent scrolling */
+    align-items: start; /* Align containers to the top */
+  }
+}
+
+/* Tablet-specific optimizations for 8" screens */
+@media (min-width: 768px) and (max-width: 1024px) {
+  main {
+    padding: 0.75rem;
+    gap: 1rem;
+    height: calc(100vh - 140px); /* Smaller height for 8" screens */
   }
 }
 
@@ -99,12 +157,28 @@ main {
   background: white;
   border-radius: 1rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  padding: 2rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 1rem;
   border: 1px solid #dbeafe;
   background: linear-gradient(to bottom right, #ffffff, #eff6ff);
+  height: 100%; /* Take full height of container */
+  overflow: hidden; /* Prevent overflow */
+  position: relative; /* For pseudo-element positioning */
+}
+
+/* Tablet-specific controls optimization */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .controls-section {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+}
+
+/* Enhanced styling for smooth, rounded appearance */
+.controls-section {
+  border-radius: 1rem !important; /* Force all corners to be rounded */
 }
 
 /* Selected Song Display */
@@ -114,7 +188,16 @@ main {
   background: linear-gradient(to right, #eff6ff, #dbeafe);
   border-radius: 0.75rem;
   border: 1px solid #bfdbfe;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Tablet-specific selected song display */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .selected-song-display {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
 }
 
 .selected-song-label {
@@ -137,7 +220,20 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: linear-gradient(to right, #f8fafc, #f1f5f9);
+  border-radius: 1rem;
+  border: 2px solid #e2e8f0;
+  margin: 0.5rem 0;
+}
+
+/* Tablet-specific tempo display */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tempo-display {
+    padding: 1.25rem;
+    margin: 0.75rem 0;
+  }
 }
 
 .tempo-label {
@@ -149,12 +245,21 @@ main {
 }
 
 .tempo-value {
-  font-size: 3.75rem;
+  font-size: 3.5rem;
   font-weight: 800;
   background: linear-gradient(to right, #2563eb, #4f46e5);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  text-align: center;
+  line-height: 1;
+}
+
+/* Tablet-specific tempo value */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tempo-value {
+    font-size: 3rem;
+  }
 }
 
 .tempo-unit {
@@ -165,15 +270,25 @@ main {
 .tempo-buttons {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+  flex-shrink: 0;
+}
+
+/* Tablet-specific tempo buttons */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tempo-buttons {
+    margin: 0.25rem 0;
+    gap: 0.5rem;
+  }
 }
 
 .tempo-button {
-  padding: 1.25rem;
+  padding: 1rem;
   border-radius: 9999px;
   background: linear-gradient(to bottom right, #f1f5f9, #e2e8f0);
   color: #2563eb;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   border: none;
   cursor: pointer;
@@ -187,6 +302,15 @@ main {
 
 .tempo-slider-container {
   padding: 0 0.25rem;
+  margin: 0.75rem 0;
+  flex-shrink: 0;
+}
+
+/* Tablet-specific tempo slider */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tempo-slider-container {
+    margin: 0.5rem 0;
+  }
 }
 
 .tempo-slider {
@@ -233,7 +357,21 @@ main {
 .control-buttons {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
+  margin: 0.75rem 0;
+  flex-shrink: 0;
+}
+
+/* Tablet-specific control buttons */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .control-buttons {
+    margin: 0.5rem 0;
+  }
+  
+  .start-button, .stop-button {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
 }
 
 .start-button, .stop-button {
@@ -241,10 +379,10 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  font-size: 1.25rem;
+  gap: 0.5rem;
+  font-size: 1.125rem;
   font-weight: 600;
-  padding: 1.25rem 1.5rem;
+  padding: 1rem 1.25rem;
   border-radius: 1rem;
   border: none;
   cursor: pointer;
@@ -287,21 +425,35 @@ main {
 .beat-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-  margin-top: 0.25rem;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  flex: 1;
+  align-items: center;
 }
 
 .beat-button {
   aspect-ratio: 1 / 1;
   width: 100%;
   border-radius: 1.5rem;
-  font-size: 3.75rem;
+  font-size: 3.5rem;
   font-weight: 900;
   letter-spacing: -0.05em;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.06);
   border: 4px solid;
   cursor: pointer;
   transition: all 0.2s ease;
+  min-height: 6rem;
+}
+
+/* Tablet-specific beat buttons */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .beat-button {
+    font-size: 2.5rem;
+    min-height: 5rem;
+    border-radius: 1.25rem;
+  }
 }
 
 .beat-button.inactive {
@@ -330,6 +482,8 @@ main {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  height: 100%; /* Take full height of main container */
+  overflow: hidden; /* Prevent overflow */
 }
 
 .photo-container {
@@ -355,18 +509,36 @@ main {
 
 .songs-container {
   background: white;
-  border-radius: 1rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  padding: 2rem;
+  padding: 1.5rem;
   border: 1px solid #dbeafe;
   background: linear-gradient(to bottom right, #ffffff, #eff6ff);
+  height: 100%; /* Take full height of container */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent container overflow */
+  position: relative; /* Ensure proper layering */
+  min-height: 0; /* Allow flex children to shrink */
+}
+
+/* Tablet-specific songs container */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .songs-container {
+    padding: 1rem;
+  }
+}
+
+/* Enhanced styling for songs container */
+.songs-container {
+  border-radius: 1rem !important; /* Force all corners to be rounded */
 }
 
 .songs-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .songs-header-left {
@@ -410,12 +582,13 @@ main {
 .songs-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
   background: #eff6ff;
-  padding: 1rem;
+  padding: 0.75rem;
   border-radius: 0.75rem;
   border: 1px solid #bfdbfe;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  flex-shrink: 0; /* Prevent form from shrinking */
 }
 
 @media (min-width: 768px) {
@@ -487,6 +660,11 @@ main {
   padding: 0;
   margin: 0;
   border-top: 1px solid #dbeafe;
+  flex: 1; /* Take remaining space */
+  overflow-y: auto; /* Enable vertical scrolling only for songs list */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+  padding-right: 0.5rem; /* Space for scrollbar */
+  min-height: 0; /* Allow flex item to shrink */
 }
 
 .song-item {
@@ -612,28 +790,7 @@ main {
   background: linear-gradient(to right, #059669, #047857);
 }
 
-/* Footer */
-footer {
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 1rem 1.5rem 2.5rem;
-}
-
-.footer-content {
-  background: linear-gradient(to bottom right, #1e3a8a, #1e40af);
-  color: white;
-  border-radius: 1rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  padding: 1.5rem;
-}
-
-.footer-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #93c5fd;
-  margin: 0 0 0.75rem 0;
-}
-
+/* Tips List (for modal) */
 .tips-list {
   list-style: none;
   padding: 0;
@@ -654,4 +811,112 @@ footer {
   border-radius: 9999px;
   flex-shrink: 0;
   margin-top: 0.125rem;
+}
+
+/* Custom scrollbar styling for songs list */
+.songs-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.songs-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.songs-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.songs-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Tips Modal */
+.tips-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.tips-modal {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 32rem;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tips-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tips-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e40af;
+  margin: 0;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #64748b;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  background: #f1f5f9;
+  color: #1e40af;
+}
+
+.tips-modal .tips-list {
+  padding: 1rem 1.5rem 1.5rem;
+  margin: 0;
+  border-top: none;
+  overflow-y: visible;
+  flex: none;
+}
+
+.tips-modal .tip-item {
+  margin-bottom: 1rem;
+}
+
+.tips-modal .tip-item:last-child {
+  margin-bottom: 0;
 }
