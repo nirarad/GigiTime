@@ -16,6 +16,16 @@ export default function GigiTimeUIMock() {
   const [running, setRunning] = useState(false);
   const [currentBeat, setCurrentBeat] = useState(1);
   const [selectedSongId, setSelectedSongId] = useState<number | null>(null);
+  const [beatCount, setBeatCount] = useState(2); // 1, 2, or 4 beats
+
+  // Configurable pulse duration for single beat (in milliseconds)
+  const PULSE_DURATION = 150; //  pulse in ms - faster and less noticeable
+
+  // Handle beat count changes
+  const handleBeatCountChange = (newBeatCount: number) => {
+    setBeatCount(newBeatCount);
+    setCurrentBeat(1); // Always reset to beat 1 when changing count
+  };
 
   // Add-song draft
   const [draftName, setDraftName] = useState("");
@@ -43,10 +53,34 @@ export default function GigiTimeUIMock() {
   // Beat blink (visual metronome)
   useEffect(() => {
     if (!running) return;
+    // Each beat should maintain the same tempo regardless of beat count
+    // The beat count just determines how many beats in a cycle
     const msPerBeat = 60000 / tempo;
-    const timer = setInterval(() => setCurrentBeat((b) => (b === 1 ? 2 : 1)), msPerBeat);
-    return () => clearInterval(timer);
-  }, [running, tempo]);
+
+    if (beatCount === 1) {
+      // For single beat, pulse briefly with constant duration then turn off
+      let timeoutId: NodeJS.Timeout;
+      const timer = setInterval(() => {
+        setCurrentBeat(1);
+        // Turn off after constant pulse duration
+        timeoutId = setTimeout(() => setCurrentBeat(0), PULSE_DURATION);
+      }, msPerBeat);
+      return () => {
+        clearInterval(timer);
+        if (timeoutId) clearTimeout(timeoutId);
+      };
+    } else {
+      // For multiple beats, cycle through them normally
+      const timer = setInterval(() => {
+        setCurrentBeat((b) => {
+          // Safety check: ensure beat is within valid range
+          if (b > beatCount) return 1;
+          return b === beatCount ? 1 : b + 1;
+        });
+      }, msPerBeat);
+      return () => clearInterval(timer);
+    }
+  }, [running, tempo, beatCount]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -220,11 +254,46 @@ export default function GigiTimeUIMock() {
             </div>
           )}
 
-          <div className="tempo-display">
+          <div className="control-buttons-mini">
+            <button
+              onClick={start}
+              disabled={running}
+              className={`control-button-mini control-start-button-mini ${running ? 'disabled' : ''}`}
+              aria-label="Start metronome"
+            >
+              <Play fill={running ? "none" : "white"} />&nbsp;&nbsp;Start
+            </button>
+            <button
+              onClick={stop}
+              disabled={!running}
+              className={`control-button-mini control-stop-button-mini ${!running ? 'disabled' : ''}`}
+              aria-label="Stop metronome"
+            >
+              <Square fill={!running ? "none" : "white"} />&nbsp;&nbsp;Stop
+            </button>
+
             <div>
               <div className="tempo-label">Tempo</div>
               <div className="tempo-value" aria-live="polite">
                 {tempo} <span className="tempo-unit">BPM</span>
+              </div>
+            </div>
+
+          </div>
+          <div className="tempo-display">
+          <div className="tempo-slider-container">
+              <input
+                type="range"
+                min={30}
+                max={240}
+                value={tempo}
+                onChange={(e) => setTempo(Number(e.target.value))}
+                className="tempo-slider"
+                aria-label="Tempo slider"
+              />
+              <div className="tempo-range">
+                <span>30</span>
+                <span>240</span>
               </div>
             </div>
             <div className="tempo-buttons-row">
@@ -258,43 +327,8 @@ export default function GigiTimeUIMock() {
               </button>
             </div>
           </div>
-
-          <div className="control-buttons-mini">
-            <button
-              onClick={start}
-              disabled={running}
-              className={`control-button-mini control-start-button-mini ${running ? 'disabled' : ''}`}
-              aria-label="Start metronome"
-            >
-              <Play fill={running ? "none" : "white"} />&nbsp;&nbsp;Start
-            </button>
-            <button
-              onClick={stop}
-              disabled={!running}
-              className={`control-button-mini control-stop-button-mini ${!running ? 'disabled' : ''}`}
-              aria-label="Stop metronome"
-            >
-              <Square fill={!running ? "none" : "white"} />&nbsp;&nbsp;Stop
-            </button>
-
-            <div className="tempo-slider-container">
-              <input
-                type="range"
-                min={30}
-                max={240}
-                value={tempo}
-                onChange={(e) => setTempo(Number(e.target.value))}
-                className="tempo-slider"
-                aria-label="Tempo slider"
-              />
-              <div className="tempo-range">
-                <span>30</span>
-                <span>240</span>
-              </div>
-            </div>
-          </div>
           <div className="beat-buttons">
-            {[1, 2].map((b) => (
+            {Array.from({ length: beatCount }, (_, i) => i + 1).map((b) => (
               <button
                 key={b}
                 className={running && currentBeat === b ? "beat-button active" : "beat-button inactive"}
@@ -303,6 +337,26 @@ export default function GigiTimeUIMock() {
                 {b}
               </button>
             ))}
+          </div>
+          <div className="beat-count-controls">
+            <button
+              className={`beat-count-button ${beatCount === 1 ? 'active' : ''}`}
+              onClick={() => handleBeatCountChange(1)}
+            >
+              1
+            </button>
+            <button
+              className={`beat-count-button ${beatCount === 2 ? 'active' : ''}`}
+              onClick={() => handleBeatCountChange(2)}
+            >
+              2
+            </button>
+            <button
+              className={`beat-count-button ${beatCount === 4 ? 'active' : ''}`}
+              onClick={() => handleBeatCountChange(4)}
+            >
+              4
+            </button>
           </div>
         </section>
 

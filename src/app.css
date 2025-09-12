@@ -449,11 +449,23 @@ main {
 
 
 .beat-buttons {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
   margin: 0.5rem 0;
   flex-shrink: 0;
+}
+
+.beat-buttons:has(.beat-button:nth-child(1)) .beat-button:nth-child(1) {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.beat-buttons:has(.beat-button:nth-child(4)) .beat-button {
+  aspect-ratio: 2 / 1;
+  height: 6.2rem;
+  width: 13rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .beat-button {
@@ -466,7 +478,7 @@ main {
   box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.06);
   border: 3px solid;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 4rem;
 }
 
@@ -490,6 +502,51 @@ main {
   0% { transform: scale(1); }
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
+}
+
+/* More subtle pulse for single beat */
+.beat-buttons:has(.beat-button:nth-child(1)) .beat-button.active {
+  animation: subtleBeatPulse 0.03s ease-out;
+}
+
+@keyframes subtleBeatPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.beat-count-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  flex-shrink: 0;
+}
+
+.beat-count-button {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid #cbd5e1;
+  background: linear-gradient(to bottom right, #f8fafc, #f1f5f9);
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 2.5rem;
+}
+
+.beat-count-button:hover {
+  background: linear-gradient(to bottom right, #e2e8f0, #cbd5e1);
+  border-color: #94a3b8;
+}
+
+.beat-count-button.active {
+  background: linear-gradient(to right, #3b82f6, #2563eb);
+  border-color: #1d4ed8;
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
 }
 
 /* Photo + Songs Section */
