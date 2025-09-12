@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Play, Square, Plus, Minus, Pencil, Trash2, Save, GripVertical, Music, RotateCcw, HelpCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Song, loadSongs, addSong as addSongToStorage, updateSong as updateSongInStorage, deleteSong as deleteSongFromStorage, reorderSongs as reorderSongsInStorage, resetToDefaultSongs } from "./songsData";
+import { VERSION } from "./version";
+import { tips } from "./tips";
 
 // Embedded drummer photo path (loads directly from your attached file in this workspace)
 const DRUMMER_PHOTO = "/images/Gigi.png";
@@ -178,14 +180,17 @@ export default function GigiTimeUIMock() {
             <h1>GIGI‑TIME</h1>
             <p>Rock‑solid metronome for Gigi</p>
           </div>
-          <button
-            className="help-button"
-            onClick={() => setShowTips(!showTips)}
-            aria-label="Show quick tips"
-            title="Quick Tips"
-          >
-            <HelpCircle />
-          </button>
+          <div className="header-right">
+            <div className="version-display">v{VERSION}</div>
+            <button
+              className="help-button"
+              onClick={() => setShowTips(!showTips)}
+              aria-label="Show quick tips"
+              title="Quick Tips"
+            >
+              <HelpCircle />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -204,22 +209,12 @@ export default function GigiTimeUIMock() {
               </button>
             </div>
             <ul className="tips-list">
-              <li className="tip-item">
-                <span className="tip-bullet"></span>
-                <span>Big, high‑contrast buttons and 2‑beat focus for simple practice.</span>
-              </li>
-              <li className="tip-item">
-                <span className="tip-bullet"></span>
-                <span>Use +/- or the slider to fine‑tune tempo (30–240 BPM).</span>
-              </li>
-              <li className="tip-item">
-                <span className="tip-bullet"></span>
-                <span>Tap a song to load its BPM; drag the grip icon to re‑order the setlist.</span>
-              </li>
-              <li className="tip-item">
-                <span className="tip-bullet"></span>
-                <span>Pencil edits; trash removes. Spacebar toggles start/stop.</span>
-              </li>
+              {tips.map((tip, index) => (
+                <li key={index} className="tip-item">
+                  <span className="tip-bullet"></span>
+                  <span>{tip}</span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
