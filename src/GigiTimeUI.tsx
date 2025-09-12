@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Play, Square, Plus, Minus, Pencil, Trash2, Save, GripVertical, Music, RotateCcw, HelpCircle } from "lucide-react";
+import { Play, Square, Plus, Minus, Pencil, Trash2, Save, GripVertical, Music, RotateCcw, HelpCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Song, loadSongs, addSong as addSongToStorage, updateSong as updateSongInStorage, deleteSong as deleteSongFromStorage, reorderSongs as reorderSongsInStorage, resetToDefaultSongs } from "./songsData";
 
 // Embedded drummer photo path (loads directly from your attached file in this workspace)
@@ -26,6 +26,13 @@ export default function GigiTimeUIMock() {
   
   // Tips modal state
   const [showTips, setShowTips] = useState(false);
+
+  // Select first song on app launch
+  useEffect(() => {
+    if (songs.length > 0 && selectedSongId === null) {
+      selectSong(songs[0]);
+    }
+  }, [songs]);
 
   // Beat blink (visual metronome)
   useEffect(() => {
@@ -78,6 +85,23 @@ export default function GigiTimeUIMock() {
   const selectSong = (song: { id: number; tempo: number }) => {
     setTempo(clamp(song.tempo, 30, 240));
     setSelectedSongId(song.id);
+  };
+
+  // Navigation functions
+  const goToPreviousSong = () => {
+    if (selectedSongId === null || songs.length === 0) return;
+    const currentIndex = songs.findIndex(song => song.id === selectedSongId);
+    if (currentIndex > 0) {
+      selectSong(songs[currentIndex - 1]);
+    }
+  };
+
+  const goToNextSong = () => {
+    if (selectedSongId === null || songs.length === 0) return;
+    const currentIndex = songs.findIndex(song => song.id === selectedSongId);
+    if (currentIndex < songs.length - 1) {
+      selectSong(songs[currentIndex + 1]);
+    }
   };
 
   // Drag & drop ordering
@@ -174,9 +198,25 @@ export default function GigiTimeUIMock() {
           {/* Selected Song Display */}
           {selectedSongId && (
             <div className="selected-song-display">
+              <button 
+                className="nav-button nav-button-left"
+                onClick={goToPreviousSong}
+                disabled={songs.findIndex(s => s.id === selectedSongId) === 0}
+                aria-label="Previous song"
+              >
+                <ChevronLeft />
+              </button>
               <div className="selected-song-name">
                 {songs.find(s => s.id === selectedSongId)?.name}
               </div>
+              <button 
+                className="nav-button nav-button-right"
+                onClick={goToNextSong}
+                disabled={songs.findIndex(s => s.id === selectedSongId) === songs.length - 1}
+                aria-label="Next song"
+              >
+                <ChevronRight />
+              </button>
             </div>
           )}
           
@@ -187,21 +227,39 @@ export default function GigiTimeUIMock() {
                 {tempo} <span className="tempo-unit">BPM</span>
               </div>
             </div>
-            <div className="tempo-buttons">
-              <button 
-                onClick={() => dec(1)} 
-                className="tempo-button" 
-                aria-label="Decrease tempo"
-              >
-                <Minus />
-              </button>
-              <button 
-                onClick={() => inc(1)} 
-                className="tempo-button" 
-                aria-label="Increase tempo"
-              >
-                <Plus />
-              </button>
+            <div className="tempo-buttons-container">
+              <div className="tempo-buttons">
+                <button 
+                  onClick={() => dec(1)} 
+                  className="tempo-button" 
+                  aria-label="Decrease tempo"
+                >
+                  <Minus />
+                </button>
+                <button 
+                  onClick={() => inc(1)} 
+                  className="tempo-button" 
+                  aria-label="Increase tempo"
+                >
+                  <Plus />
+                </button>
+              </div>
+              <div className="tempo-buttons-coarse">
+                <button 
+                  onClick={() => dec(5)} 
+                  className="tempo-button-coarse" 
+                  aria-label="Decrease tempo by 5"
+                >
+                  -5
+                </button>
+                <button 
+                  onClick={() => inc(5)} 
+                  className="tempo-button-coarse" 
+                  aria-label="Increase tempo by 5"
+                >
+                  +5
+                </button>
+              </div>
             </div>
           </div>
 

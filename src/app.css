@@ -183,13 +183,16 @@ main {
 
 /* Selected Song Display */
 .selected-song-display {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 1rem;
   background: linear-gradient(to right, #eff6ff, #dbeafe);
   border-radius: 0.75rem;
   border: 1px solid #bfdbfe;
   margin-bottom: 0.75rem;
   flex-shrink: 0; /* Prevent shrinking */
+  gap: 1rem;
 }
 
 /* Tablet-specific selected song display */
@@ -214,6 +217,44 @@ main {
   font-weight: 600;
   color: #1e3a8a;
   line-height: 1.2;
+  flex: 1;
+  text-align: center;
+}
+
+/* Navigation Buttons */
+.nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: linear-gradient(to bottom right, #3b82f6, #2563eb);
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: linear-gradient(to bottom right, #2563eb, #1d4ed8);
+  transform: scale(1.05);
+  box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.15);
+}
+
+.nav-button:disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+.nav-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .tempo-display {
@@ -221,19 +262,19 @@ main {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 1rem;
+  padding: 0.75rem;
   background: linear-gradient(to right, #f8fafc, #f1f5f9);
   border-radius: 1rem;
   border: 2px solid #e2e8f0;
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
   flex-shrink: 0; /* Prevent shrinking */
 }
 
 /* Tablet-specific tempo display */
 @media (min-width: 768px) and (max-width: 1024px) {
   .tempo-display {
-    padding: 1.25rem;
-    margin: 0.75rem 0;
+    padding: 0.875rem;
+    margin: 0.5rem 0;
   }
 }
 
@@ -268,22 +309,31 @@ main {
   font-weight: 600;
 }
 
-.tempo-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-  flex: 1;
+.tempo-buttons-container {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  flex-shrink: 0; /* Prevent shrinking */
+  gap: 0.4rem;
+  margin: 0.25rem 0;
+  flex-shrink: 0;
+}
+
+.tempo-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.0rem;
+  flex-shrink: 0;
 }
 
 /* Tablet-specific tempo buttons */
 @media (min-width: 768px) and (max-width: 1024px) {
+  .tempo-buttons-container {
+    margin: 0.2rem 0;
+    gap: 0.3rem;
+  }
+  
   .tempo-buttons {
-    margin: 0.25rem 0;
     gap: 0.5rem;
   }
 }
@@ -302,6 +352,37 @@ main {
 }
 
 .tempo-button:hover {
+  background: linear-gradient(to bottom right, #e2e8f0, #cbd5e1);
+}
+
+/* Coarse Tempo Buttons (20% smaller) */
+.tempo-buttons-coarse {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem; /* 20% smaller gap */
+  margin: 0.4rem 0; /* 20% smaller margin */
+  flex-shrink: 0;
+}
+
+.tempo-button-coarse {
+  padding: 0.8rem; /* 20% smaller padding */
+  border-radius: 9999px;
+  background: linear-gradient(to bottom right, #e7eaee, #d2e1fc);
+  color: #2563eb;
+  font-size: 1rem; /* 20% smaller font size */
+  font-weight: 800; /* Slightly bolder for better visibility */
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 3.2px 4.8px -1px rgba(0, 0, 0, 0.1), 0 1.6px 3.2px -1px rgba(0, 0, 0, 0.06); /* 20% smaller shadows */
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem; /* Ensure consistent button size */
+  min-height: 2.5rem; /* Ensure consistent button size */
+}
+
+.tempo-button-coarse:hover {
   background: linear-gradient(to bottom right, #e2e8f0, #cbd5e1);
 }
 
@@ -428,14 +509,11 @@ main {
 }
 
 .beat-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-  flex: 1;
+  display: flex;
   align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+  flex-shrink: 0;
 }
 
 .beat-button {
