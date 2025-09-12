@@ -831,6 +831,13 @@ main {
   width: 100%;
 }
 
+.song-edit-track-number {
+  font-weight: 600;
+  color: #2563eb;
+  min-width: 1.5rem;
+  text-align: center;
+}
+
 .song-edit-input {
   flex: 1;
   padding: 0.5rem 1rem;

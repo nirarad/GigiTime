@@ -39,6 +39,12 @@ export default function GigiTimeUIMock() {
   // Tips modal state
   const [showTips, setShowTips] = useState(false);
 
+  // Helper function to get track number
+  const getTrackNumber = useCallback((songId: number) => {
+    const index = songs.findIndex(s => s.id === songId);
+    return index >= 0 ? index + 1 : 0;
+  }, [songs]);
+
   // Selecting a song loads its tempo & highlights
   const selectSong = useCallback((song: { id: number; tempo: number }) => {
     setTempo(clamp(song.tempo, 30, 240));
@@ -236,7 +242,7 @@ export default function GigiTimeUIMock() {
                 <ChevronLeft />
               </button>
               <div className="selected-song-name">
-                {songs.find(s => s.id === selectedSongId)?.name}
+                {getTrackNumber(selectedSongId)}. {songs.find(s => s.id === selectedSongId)?.name}
               </div>
               <button
                 className="nav-button nav-button-right"
@@ -416,6 +422,7 @@ export default function GigiTimeUIMock() {
                   <GripVertical className="grip-icon" />
                   {s.editing ? (
                     <div className="song-edit-form">
+                      <div className="song-edit-track-number">{getTrackNumber(s.id)}.</div>
                       <input
                         className="song-edit-input"
                         value={s.name}
@@ -449,7 +456,7 @@ export default function GigiTimeUIMock() {
                   ) : (
                     <>
                       <div className="song-info">
-                        <div className="song-name">{s.name}</div>
+                        <div className="song-name">{getTrackNumber(s.id)}. {s.name}</div>
                         <div className="song-tempo">{s.tempo} BPM</div>
                       </div>
                       <div className="song-actions">
