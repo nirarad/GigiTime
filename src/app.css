@@ -132,14 +132,14 @@ main {
   grid-template-columns: 1fr;
   height: calc(100vh - 140px); /* Fixed height to prevent scrolling */
   overflow: hidden; /* Prevent main container scrolling */
-  align-items: start; /* Align containers to the top */
+  align-items: stretch; /* Make both columns equal height */
 }
 
 @media (min-width: 768px) {
   main {
     grid-template-columns: 1fr 1fr;
     height: calc(100vh - 160px); /* Fixed height to prevent scrolling */
-    align-items: start; /* Align containers to the top */
+    align-items: stretch; /* Make both columns equal height */
   }
 }
 
@@ -155,16 +155,17 @@ main {
   gap: 0.75rem;
   border: 1px solid #dbeafe;
   background: linear-gradient(to bottom right, #ffffff, #eff6ff);
-  height: fit-content; /* Changed from 100% to fit-content to prevent overflow */
-  overflow: visible; /* Changed from hidden to visible to show all content */
-  position: relative; /* For pseudo-element positioning */
+  height: 100%; /* Take full height to match the song list */
+  overflow: hidden; /* Changed from hidden to visible to show all content */
+  /*position: relative; /* For pseudo-element positioning */
+  /*justify-content: flex-start; /* Align content to top */
 }
 
 
 /* Enhanced styling for smooth, rounded appearance */
-.controls-section {
-  border-radius: 1rem !important; /* Force all corners to be rounded */
-}
+/* .controls-section {
+  border-radius: 1rem !important;
+} */
 
 /* Selected Song Display */
 .selected-song-display {
@@ -177,7 +178,7 @@ main {
   border: 1px solid #bfdbfe;
   margin-bottom: 0.75rem;
   flex-shrink: 0; /* Prevent shrinking */
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 
@@ -235,12 +236,91 @@ main {
   height: 1.25rem;
 }
 
+/* Mini Control Buttons */
+.control-buttons-mini {
+  background: linear-gradient(to right, #eff6ff, #dbeafe);
+  border-radius: 0.75rem;
+  border: 1px solid #bfdbfe;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+  padding: 0.75rem;
+}
+
+/* Tempo slider takes 2/3 of the container width */
+.control-buttons-mini .tempo-slider-container {
+  flex: 2;
+  padding: 0 0.25rem;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* Start/Stop buttons take 1/3 of the container width */
+.control-buttons-mini .control-button-mini {
+  flex: 1;
+  min-width: 0; /* Allow buttons to shrink if needed */
+}
+
+/* Base styles for all control buttons */
+.control-button-mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.control-button-mini:not(.disabled):hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.15);
+}
+
+.control-button-mini.disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+}
+
+.control-button-mini svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Start button specific styles */
+.control-start-button-mini:not(.disabled) {
+  background: linear-gradient(to right, #10b981, #059669);
+  color: white;
+}
+
+.control-start-button-mini:not(.disabled):hover {
+  background: linear-gradient(to right, #059669, #047857);
+}
+
+/* Stop button specific styles */
+.control-stop-button-mini:not(.disabled) {
+  background: linear-gradient(to right, #b91010, #960505);
+  color: white;
+}
+
+.control-stop-button-mini:not(.disabled):hover {
+  background: linear-gradient(to right, #960505, #780404);
+}
+
 .tempo-display {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.5rem;
+  padding: 0.75rem;
   background: linear-gradient(to right, #f8fafc, #f1f5f9);
   border-radius: 0.75rem;
   border: 2px solid #e2e8f0;
@@ -324,12 +404,7 @@ main {
   background: linear-gradient(to bottom right, #e2e8f0, #cbd5e1);
 }
 
-.tempo-slider-container {
-  padding: 0 0.25rem;
-  margin: 0.75rem 0;
-  flex-shrink: 0;
-}
-
+/* Tempo slider container styles moved to control-buttons-mini section */
 
 .tempo-slider {
   -webkit-appearance: none;
@@ -372,62 +447,6 @@ main {
   margin-top: 0.5rem;
 }
 
-.control-buttons {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin: 0.75rem 0;
-  flex-shrink: 0;
-}
-
-
-.start-button, .stop-button {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  font-size: 1.125rem;
-  font-weight: 600;
-  padding: 1rem 1.25rem;
-  border-radius: 1rem;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  transition: all 0.2s;
-}
-
-.start-button {
-  background: linear-gradient(to right, #10b981, #059669);
-  color: white;
-}
-
-.start-button:hover:not(:disabled) {
-  background: linear-gradient(to right, #059669, #047857);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.start-button:disabled {
-  background: #e2e8f0;
-  color: #94a3b8;
-  cursor: not-allowed;
-}
-
-.stop-button {
-  background: linear-gradient(to right, #ef4444, #dc2626);
-  color: white;
-}
-
-.stop-button:hover:not(:disabled) {
-  background: linear-gradient(to right, #dc2626, #b91c1c);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.stop-button:disabled {
-  background: #e2e8f0;
-  color: #94a3b8;
-  cursor: not-allowed;
-}
 
 .beat-buttons {
   display: flex;

@@ -23,7 +23,7 @@ export default function GigiTimeUIMock() {
 
   // Songs - loaded from external storage
   const [songs, setSongs] = useState<Song[]>(() => loadSongs());
-  
+
   // Tips modal state
   const [showTips, setShowTips] = useState(false);
 
@@ -54,10 +54,10 @@ export default function GigiTimeUIMock() {
       // Check if user is editing a song (allow spacebar in input fields)
       const target = e.target as HTMLElement;
       const isEditingSong = target.tagName === 'INPUT' && target.closest('.song-edit-form');
-      
-      if (e.key === " " && !isEditingSong) { 
-        e.preventDefault(); 
-        setRunning((r) => !r); 
+
+      if (e.key === " " && !isEditingSong) {
+        e.preventDefault();
+        setRunning((r) => !r);
       }
       if (e.key === "+" || e.key === "=") setTempo((t) => clamp(t + 1, 30, 240));
       if (e.key === "-") setTempo((t) => clamp(t - 1, 30, 240));
@@ -129,9 +129,9 @@ export default function GigiTimeUIMock() {
       <header className="app-header">
         <div className="header-content">
           <div className="drummer-thumbnail">
-            <img 
-              src={DRUMMER_PHOTO} 
-              alt="Drummer" 
+            <img
+              src={DRUMMER_PHOTO}
+              alt="Drummer"
               onError={(e) => {
                 console.error("Image failed to load:", e);
                 console.error("Image path attempted:", DRUMMER_PHOTO);
@@ -144,7 +144,7 @@ export default function GigiTimeUIMock() {
             <h1>GIGI‑TIME</h1>
             <p>Rock‑solid metronome for Gigi</p>
           </div>
-          <button 
+          <button
             className="help-button"
             onClick={() => setShowTips(!showTips)}
             aria-label="Show quick tips"
@@ -161,7 +161,7 @@ export default function GigiTimeUIMock() {
           <div className="tips-modal" onClick={(e) => e.stopPropagation()}>
             <div className="tips-modal-header">
               <h3>Quick Tips</h3>
-              <button 
+              <button
                 className="close-button"
                 onClick={() => setShowTips(false)}
                 aria-label="Close tips"
@@ -198,7 +198,7 @@ export default function GigiTimeUIMock() {
           {/* Selected Song Display */}
           {selectedSongId && (
             <div className="selected-song-display">
-              <button 
+              <button
                 className="nav-button nav-button-left"
                 onClick={goToPreviousSong}
                 disabled={songs.findIndex(s => s.id === selectedSongId) === 0}
@@ -209,7 +209,7 @@ export default function GigiTimeUIMock() {
               <div className="selected-song-name">
                 {songs.find(s => s.id === selectedSongId)?.name}
               </div>
-              <button 
+              <button
                 className="nav-button nav-button-right"
                 onClick={goToNextSong}
                 disabled={songs.findIndex(s => s.id === selectedSongId) === songs.length - 1}
@@ -219,7 +219,7 @@ export default function GigiTimeUIMock() {
               </button>
             </div>
           )}
-          
+
           <div className="tempo-display">
             <div>
               <div className="tempo-label">Tempo</div>
@@ -228,30 +228,30 @@ export default function GigiTimeUIMock() {
               </div>
             </div>
             <div className="tempo-buttons-row">
-            <button 
-                onClick={() => dec(5)} 
-                className="tempo-button-coarse" 
+              <button
+                onClick={() => dec(5)}
+                className="tempo-button-coarse"
                 aria-label="Decrease tempo by 5"
               >
                 -5
               </button>
-              <button 
-                onClick={() => dec(1)} 
-                className="tempo-button" 
+              <button
+                onClick={() => dec(1)}
+                className="tempo-button"
                 aria-label="Decrease tempo"
               >
                 <Minus />
               </button>
-              <button 
-                onClick={() => inc(1)} 
-                className="tempo-button" 
+              <button
+                onClick={() => inc(1)}
+                className="tempo-button"
                 aria-label="Increase tempo"
               >
                 <Plus />
               </button>
-              <button 
-                onClick={() => inc(5)} 
-                className="tempo-button-coarse" 
+              <button
+                onClick={() => inc(5)}
+                className="tempo-button-coarse"
                 aria-label="Increase tempo by 5"
               >
                 +5
@@ -259,44 +259,45 @@ export default function GigiTimeUIMock() {
             </div>
           </div>
 
-          <div className="tempo-slider-container">
-            <input 
-              type="range" 
-              min={30} 
-              max={240} 
-              value={tempo} 
-              onChange={(e) => setTempo(Number(e.target.value))} 
-              className="tempo-slider" 
-              aria-label="Tempo slider" 
-            />
-            <div className="tempo-range">
-              <span>30</span>
-              <span>240</span>
+          <div className="control-buttons-mini">
+            <button
+              onClick={start}
+              disabled={running}
+              className={`control-button-mini control-start-button-mini ${running ? 'disabled' : ''}`}
+              aria-label="Start metronome"
+            >
+              <Play fill={running ? "none" : "white"} />&nbsp;&nbsp;Start
+            </button>
+            <button
+              onClick={stop}
+              disabled={!running}
+              className={`control-button-mini control-stop-button-mini ${!running ? 'disabled' : ''}`}
+              aria-label="Stop metronome"
+            >
+              <Square fill={!running ? "none" : "white"} />&nbsp;&nbsp;Stop
+            </button>
+
+            <div className="tempo-slider-container">
+              <input
+                type="range"
+                min={30}
+                max={240}
+                value={tempo}
+                onChange={(e) => setTempo(Number(e.target.value))}
+                className="tempo-slider"
+                aria-label="Tempo slider"
+              />
+              <div className="tempo-range">
+                <span>30</span>
+                <span>240</span>
+              </div>
             </div>
           </div>
-
-          <div className="control-buttons">
-            <button 
-              onClick={start} 
-              disabled={running} 
-              className={running ? "start-button disabled" : "start-button"}
-            >
-              <Play fill={running ? "none" : "white"}/> Start
-            </button>
-            <button 
-              onClick={stop} 
-              disabled={!running} 
-              className={!running ? "stop-button disabled" : "stop-button"}
-            >
-              <Square fill={!running ? "none" : "white"}/> Stop
-            </button>
-          </div>
-
           <div className="beat-buttons">
-            {[1,2].map((b) => (
-              <button 
-                key={b} 
-                className={running && currentBeat === b ? "beat-button active" : "beat-button inactive"} 
+            {[1, 2].map((b) => (
+              <button
+                key={b}
+                className={running && currentBeat === b ? "beat-button active" : "beat-button inactive"}
                 aria-pressed={running && currentBeat === b}
               >
                 {b}
@@ -308,47 +309,47 @@ export default function GigiTimeUIMock() {
         {/* Songs */}
         <section className="media-section">
           <div className="songs-container">
-                         <div className="songs-header">
-               <div className="songs-header-left">
-                 <Music className="songs-icon" />
-                 <h2 className="songs-title">Songs</h2>
-               </div>
-               <button 
-                 className="reset-button" 
-                 onClick={() => {
-                   const updatedSongs = resetToDefaultSongs();
-                   setSongs(updatedSongs);
-                 }}
-                 title="Reset to default songs"
-               >
-                 <RotateCcw className="reset-icon" />
-               </button>
-             </div>
+            <div className="songs-header">
+              <div className="songs-header-left">
+                <Music className="songs-icon" />
+                <h2 className="songs-title">Songs</h2>
+              </div>
+              <button
+                className="reset-button"
+                onClick={() => {
+                  const updatedSongs = resetToDefaultSongs();
+                  setSongs(updatedSongs);
+                }}
+                title="Reset to default songs"
+              >
+                <RotateCcw className="reset-icon" />
+              </button>
+            </div>
 
             <div className="songs-form">
               <div className="form-group">
                 <label>Song name</label>
-                <input 
-                  value={draftName} 
-                  onChange={(e) => setDraftName(e.target.value)} 
-                  placeholder="e.g., My Way" 
+                <input
+                  value={draftName}
+                  onChange={(e) => setDraftName(e.target.value)}
+                  placeholder="e.g., My Way"
                 />
               </div>
               <div className="form-group tempo-input">
                 <label>Tempo</label>
-                <input 
-                  type="number" 
-                  min={30} 
-                  max={240} 
-                  value={draftTempo} 
-                  onChange={(e) => setDraftTempo(Number(e.target.value))} 
+                <input
+                  type="number"
+                  min={30}
+                  max={240}
+                  value={draftTempo}
+                  onChange={(e) => setDraftTempo(Number(e.target.value))}
                 />
               </div>
-              <button 
-                onClick={addSong} 
+              <button
+                onClick={addSong}
                 className="save-button"
               >
-                <Save className="save-icon"/> Save
+                <Save className="save-icon" /> Save
               </button>
             </div>
 
@@ -363,38 +364,38 @@ export default function GigiTimeUIMock() {
                   className={`song-item ${selectedSongId === s.id ? 'selected' : ''}`}
                   onClick={() => selectSong(s)}
                 >
-                  <GripVertical className="grip-icon"/>
+                  <GripVertical className="grip-icon" />
                   {s.editing ? (
                     <div className="song-edit-form">
-                                             <input 
-                         className="song-edit-input" 
-                         value={s.name} 
-                         onChange={(e)=> {
-                           const updatedSongs = updateSongInStorage(songs, s.id, { name: e.target.value });
-                           setSongs(updatedSongs);
-                         }} 
-                       />
-                       <input 
-                         type="number" 
-                         min={30} 
-                         max={240} 
-                         className="song-edit-tempo" 
-                         value={s.tempo} 
-                         onChange={(e)=> {
-                           const updatedSongs = updateSongInStorage(songs, s.id, { tempo: Number(e.target.value) });
-                           setSongs(updatedSongs);
-                         }} 
-                       />
-                       <button 
-                         className="done-button" 
-                         onClick={(e)=> {
-                           e.stopPropagation(); 
-                           const updatedSongs = updateSongInStorage(songs, s.id, { editing: false });
-                           setSongs(updatedSongs);
-                         }}
-                       >
-                         Done
-                       </button>
+                      <input
+                        className="song-edit-input"
+                        value={s.name}
+                        onChange={(e) => {
+                          const updatedSongs = updateSongInStorage(songs, s.id, { name: e.target.value });
+                          setSongs(updatedSongs);
+                        }}
+                      />
+                      <input
+                        type="number"
+                        min={30}
+                        max={240}
+                        className="song-edit-tempo"
+                        value={s.tempo}
+                        onChange={(e) => {
+                          const updatedSongs = updateSongInStorage(songs, s.id, { tempo: Number(e.target.value) });
+                          setSongs(updatedSongs);
+                        }}
+                      />
+                      <button
+                        className="done-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const updatedSongs = updateSongInStorage(songs, s.id, { editing: false });
+                          setSongs(updatedSongs);
+                        }}
+                      >
+                        Done
+                      </button>
                     </div>
                   ) : (
                     <>
@@ -403,21 +404,21 @@ export default function GigiTimeUIMock() {
                         <div className="song-tempo">{s.tempo} BPM</div>
                       </div>
                       <div className="song-actions">
-                                                 <button 
-                           className="edit-button" 
-                           aria-label={`Edit ${s.name}`} 
-                           onClick={(e)=> {
-                             e.stopPropagation(); 
-                             const updatedSongs = updateSongInStorage(songs, s.id, { editing: true });
-                             setSongs(updatedSongs);
-                           }}
-                         >
+                        <button
+                          className="edit-button"
+                          aria-label={`Edit ${s.name}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const updatedSongs = updateSongInStorage(songs, s.id, { editing: true });
+                            setSongs(updatedSongs);
+                          }}
+                        >
                           <Pencil className="edit-icon" />
                         </button>
-                        <button 
-                          className="delete-button" 
-                          aria-label={`Remove ${s.name}`} 
-                          onClick={(e)=> {e.stopPropagation(); removeSong(s.id);}}
+                        <button
+                          className="delete-button"
+                          aria-label={`Remove ${s.name}`}
+                          onClick={(e) => { e.stopPropagation(); removeSong(s.id); }}
                         >
                           <Trash2 className="delete-icon" />
                         </button>
