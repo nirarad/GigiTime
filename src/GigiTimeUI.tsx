@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Play, Square, Plus, Minus, Pencil, Trash2, Save, GripVertical, Music, RotateCcw, HelpCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Song, loadSongs, addSong as addSongToStorage, updateSong as updateSongInStorage, deleteSong as deleteSongFromStorage, reorderSongs as reorderSongsInStorage, resetToDefaultSongs } from "./songsData";
 
@@ -27,12 +27,18 @@ export default function GigiTimeUIMock() {
   // Tips modal state
   const [showTips, setShowTips] = useState(false);
 
+  // Selecting a song loads its tempo & highlights
+  const selectSong = useCallback((song: { id: number; tempo: number }) => {
+    setTempo(clamp(song.tempo, 30, 240));
+    setSelectedSongId(song.id);
+  }, []);
+
   // Select first song on app launch
   useEffect(() => {
     if (songs.length > 0 && selectedSongId === null) {
       selectSong(songs[0]);
     }
-  }, [songs]);
+  }, [songs, selectedSongId, selectSong]);
 
   // Beat blink (visual metronome)
   useEffect(() => {
@@ -80,12 +86,6 @@ export default function GigiTimeUIMock() {
   const stop = () => setRunning(false);
   const inc = (d = 1) => setTempo((t) => clamp(t + d, 30, 240));
   const dec = (d = 1) => setTempo((t) => clamp(t - d, 30, 240));
-
-  // Selecting a song loads its tempo & highlights
-  const selectSong = (song: { id: number; tempo: number }) => {
-    setTempo(clamp(song.tempo, 30, 240));
-    setSelectedSongId(song.id);
-  };
 
   // Navigation functions
   const goToPreviousSong = () => {
@@ -227,39 +227,35 @@ export default function GigiTimeUIMock() {
                 {tempo} <span className="tempo-unit">BPM</span>
               </div>
             </div>
-            <div className="tempo-buttons-container">
-              <div className="tempo-buttons">
-                <button 
-                  onClick={() => dec(1)} 
-                  className="tempo-button" 
-                  aria-label="Decrease tempo"
-                >
-                  <Minus />
-                </button>
-                <button 
-                  onClick={() => inc(1)} 
-                  className="tempo-button" 
-                  aria-label="Increase tempo"
-                >
-                  <Plus />
-                </button>
-              </div>
-              <div className="tempo-buttons-coarse">
-                <button 
-                  onClick={() => dec(5)} 
-                  className="tempo-button-coarse" 
-                  aria-label="Decrease tempo by 5"
-                >
-                  -5
-                </button>
-                <button 
-                  onClick={() => inc(5)} 
-                  className="tempo-button-coarse" 
-                  aria-label="Increase tempo by 5"
-                >
-                  +5
-                </button>
-              </div>
+            <div className="tempo-buttons-row">
+            <button 
+                onClick={() => dec(5)} 
+                className="tempo-button-coarse" 
+                aria-label="Decrease tempo by 5"
+              >
+                -5
+              </button>
+              <button 
+                onClick={() => dec(1)} 
+                className="tempo-button" 
+                aria-label="Decrease tempo"
+              >
+                <Minus />
+              </button>
+              <button 
+                onClick={() => inc(1)} 
+                className="tempo-button" 
+                aria-label="Increase tempo"
+              >
+                <Plus />
+              </button>
+              <button 
+                onClick={() => inc(5)} 
+                className="tempo-button-coarse" 
+                aria-label="Increase tempo by 5"
+              >
+                +5
+              </button>
             </div>
           </div>
 
